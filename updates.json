@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 638840189,
+      "message": {
+        "message_id": 2,
+        "from": {
+          "id": 367670696,
+          "is_bot": false,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "language_code": "en"
+        },
+        "chat": {
+          "id": 367670696,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "type": "private"
+        },
+        "date": 1568011192,
+        "text": "/start",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 6,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 638840190,
+      "message": {
+        "message_id": 5,
+        "from": {
+          "id": 367670696,
+          "is_bot": false,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "language_code": "en"
+        },
+        "chat": {
+          "id": 367670696,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "type": "private"
+        },
+        "date": 1568012890,
+        "text": "hello Bot"
+      }
+    },
+    {
+      "update_id": 638840191,
+      "message": {
+        "message_id": 6,
+        "from": {
+          "id": 367670696,
+          "is_bot": false,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "language_code": "en"
+        },
+        "chat": {
+          "id": 367670696,
+          "first_name": "Nikita",
+          "last_name": "Severin",
+          "type": "private"
+        },
+        "date": 1568013061,
+        "text": "привет"
+      }
+    }
+  ]
+}
