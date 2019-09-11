@@ -1,56 +1,53 @@
+from flask import Flask, request
 import requests
-import misc
-from exchange import get_btc
+from flask import jsonify
+import re
+from flask_sslify import SSLify
 
-token = misc.token
-URL = 'https://api.telegram.org/bot' + token + '/'
+token = '979461001:AAFw8ckQD3N1CTN2EoBlu86bCahq28cGMVc'
 
-last_message_update_id = 0
+app = Flask(__name__)
+sslify = SSLify(app)
 
-
-def get_updates():
-    url = URL + 'getupdates'
-    r = requests.get(url)
-    return r.json()
-
-
-def get_message():
-    data = get_updates()
-
-    last_object = data['result'][-1]
-    current_update_id = last_object['update_id']
-
-    global last_message_update_id
-    if last_message_update_id != current_update_id:
-        last_message_update_id = current_update_id
-
-        chat_id = last_object['message']['chat']['id']
-        message_text = last_object['message']['text']
-
-        message = {'chat_id': chat_id,
-                   'text': message_text}
-
-        return message
-    return None
+URL = f'https://api.telegram.org/bot{token}/'
 
 
 def send_message(chat_id, text):
-    url = URL + 'sendmessage?chat_id={}&text={}'.format(chat_id, text)
-    requests.get(url)
+    url = URL + 'sendMessage'
+    answer = {'chat_id': chat_id, 'text': text}
+    r = requests.post(url, json=answer)
+    return r.json()
 
 
-def main():
-    while True:
-        answer = get_message()
-        if answer != None:
-            chat_id = answer['chat_id']
-            text = answer['text']
+def parse_text(text):
+    pattern = r'/\w+'
+    coin = re.search(pattern, text).group()
+    return coin[1:]
 
-            if text == '/btc':
-                send_message(chat_id, get_btc())
-        else:
-            continue
+
+def get_price(coin):
+    url = f'https://yobit.net/api/3/ticker/{coin}_usd'
+    r = requests.get(url).json()
+    price = r[f'{coin}_usd']['last']
+    return price
+
+
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    if request.method == 'POST':
+        r = request.get_json()
+        chat_id = r['message']['chat']['id']
+        message = r['message']['text']
+
+        pattern = r'/\w+'
+
+        if re.search(pattern, message):
+            price = get_price(parse_text(message))
+            send_message(chat_id, text=price)
+
+        return jsonify(r)
+    return '<h1>Greetings!</h1>'
 
 
 if __name__ == '__main__':
-    main()
+    app.run()
